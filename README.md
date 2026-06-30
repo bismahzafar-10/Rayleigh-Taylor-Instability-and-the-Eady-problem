@@ -1,4 +1,3 @@
-
 # Numerical Stability Analysis of Barotropic and Baroclinic Fluid Instabilities
 
 A computational fluid dynamics (CFD) suite implementing generalized eigenvalue problem solvers, finite difference discretizations, and data-driven modal analysis techniques to study the linear stability of parallel shear flows. This work was conducted during the **Twoples Mentorship Programme (Spring 2025)** under the mentorship of Dr. Mansi Singh (KU Eichstätt-Ingolstadt).
@@ -42,10 +41,13 @@ Enforcing the Dirichlet boundaries $\hat{\psi}(-1) = \hat{\psi}(1) = 0$ onto the
 
 $$\mathbf{A}\hat{\psi} = c\mathbf{B}\hat{\psi}$$
 
-Where the entries of the non-constant matrix $\mathbf{A}$ and constant matrix $\mathbf{B}$ are configured dynamically:
+Where the structural components of matrices $\mathbf{A}$ and $\mathbf{B}$ are configured dynamically across the interior grid nodes $i = 1, \dots, N-2$:
 
-$$a_{i} = -\left(\frac{2(1-y_i^2)}{(\Delta y)^2} + k^2(1-y_i^2) - U''(y_i)\right), \quad b_{i} = \frac{1-y_i^2}{(\Delta y)^2}$$
-$$b_{ii} = -\left(\frac{2}{(\Delta y)^2} + k^2\right), \quad b_{i,i\pm1} = \frac{1}{(\Delta y)^2}$$
+$$B_{ii} = -\left(\frac{2}{(\Delta y)^2} + k^2\right), \quad B_{i, i\pm1} = \frac{1}{(\Delta y)^2}$$
+
+$$A_{ij} = U(y_i)B_{ij} - U''(y_i)\delta_{ij}$$
+
+*(Where $\delta_{ij}$ represents the Kronecker delta mapping for identity matrix scaling).*
 
 The code solves this linear algebraic system using `scipy.linalg.eig` to obtain the complete spectrum of discrete phase speeds.
 
@@ -72,24 +74,27 @@ Ensure you have Python 3.8+ installed along with the required libraries:
 ```bash
 pip install -r requirements.txt
 ```
-## Execution
-Run the main script to loop through the test cases, execute the eigenvalue solver, apply data-driven structural decomposition, and export visual field results:
+### Execution
+Run the main script to choose a profile layout, execute the eigenvalue solver, apply spatial reconstruction, and export visual analytics:
 ```bash
 python main.py
 ```
----
 
 ## 📈 Sample Results & Visualization
 
-The pipeline automatically outputs several diagnostics into the figures/ directory:
-1. Eigenvalue Spectrums: Isolating unstable growing modes ($\text{Im}(\omega) > 0$).
-2. Flow Fields: Iso-contours mapping the perturbation streamfunction $\psi(x,y)$.
-3. Velocity Vectors: Quiver vector layouts capturing spatial $(u, v)$ velocity perturbations.
+The pipeline automatically processes velocity profile variants and outputs several diagnostics directly into the `figures/` directory.
 
+### 1. Base Velocity Profiles & Spectra Plots
+Evaluating the eigenvalue spectrum isolates unstable growing modes where $\text{Im}(\omega) > 0$.
 
----
+| Velocity Shear Layer Profile | Corresponding Eigenvalue Spectrum |
+| :---: | :---: |
+| ![Parabolic Profile](figures/profile_1_m_y2.png) | ![Parabolic Spectrum](figures/spectrum_1_m_y2.png) |
+| ![Tanh Profile](figures/profile_tanh(y_0.5).png) | ![Tanh Spectrum](figures/spectrum_tanh(y_0.5).png) |
 
-### 💡 Quick Tips for Maximum Impact
+### 2. 2D Flow Perturbations & Structural Gradients
+For profiles containing physical inflection points, the system isolates the dominant eigenmode and projects the streamfunction contours and associated velocity vector configurations:
 
-1. **Populate your `figures/` folder:** Since your research code explicitly generates eigenvalue spectrum graphs, streamfunction contour maps, and $(u,v)$ velocity component fields[cite: 306, 307], make sure to include high-quality images of them in your repository. GitHub profiles look substantially more mature when visual analytics accompany numerical descriptions.
-2. **Upload the PDF Report:** Keeping `Twoples.pdf` directly in the root directory acts as a built-in whitepaper for your repository, immediately linking your clean codebase to its academic-grade derivation[cite: 1, 124].
+| Streamfunction Contours $\psi(x,y)$ | Velocity Field Vector Quiver ($u, v$) |
+| :---: | :---: |
+| ![Flow Contours](figures/flow_field_tanh(y_0.5).png) | ![Velocity Vector Fields](figures/velocity_quiver_tanh(y_0.5).png) |
