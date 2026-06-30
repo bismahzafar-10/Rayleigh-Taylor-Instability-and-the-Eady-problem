@@ -80,21 +80,3 @@ Run the main script to choose a profile layout, execute the eigenvalue solver, a
 python main.py
 ```
 
-## 📈 Sample Results & Visualization
-
-The pipeline automatically processes velocity profile variants and outputs several diagnostics directly into the `figures/` directory.
-
-### 1. Base Velocity Profiles & Spectra Plots
-Evaluating the eigenvalue spectrum isolates unstable growing modes where $\text{Im}(\omega) > 0$.
-
-| Velocity Shear Layer Profile | Corresponding Eigenvalue Spectrum |
-| :---: | :---: |
-| ![Parabolic Profile](figures/profile_1_m_y2.png) | ![Parabolic Spectrum](figures/spectrum_1_m_y2.png) |
-| ![Tanh Profile](figures/profile_tanh(y_0.5).png) | ![Tanh Spectrum](figures/spectrum_tanh(y_0.5).png) |
-
-### 2. 2D Flow Perturbations & Structural Gradients
-For profiles containing physical inflection points, the system isolates the dominant eigenmode and projects the streamfunction contours and associated velocity vector configurations:
-
-| Streamfunction Contours $\psi(x,y)$ | Velocity Field Vector Quiver ($u, v$) |
-| :---: | :---: |
-| ![Flow Contours](figures/flow_field_tanh(y_0.5).png) | ![Velocity Vector Fields](figures/velocity_quiver_tanh(y_0.5).png) |
